@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "Branch version to release"
+        required: true
+        default: "dev"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      # checkout the branch
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ inputs.branch }}
+
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.20
+
+      - name: Release
+        run: |
+          wget ./bazel-amd64 https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
+          chmod +x ./bazel-amd64
+          ./bazel/install-deps.sh
+          ./bazel-amd64 build --config=release //...
+
