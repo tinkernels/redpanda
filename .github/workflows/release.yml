@@ -26,8 +26,8 @@ jobs:
 
       - name: Release
         run: |
-          wget ./bazel-amd64 https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
-          chmod +x ./bazel-amd64
-          ./bazel/install-deps.sh
-          ./bazel-amd64 build --config=release //...
+          mkdir -v -p $HOME/.local/bin
+          wget -O $HOME/.local/bin/bazel https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
+          chmod +x $HOME/.local/bin/bazel
+          $HOME/.local/bin/bazel build --config=release //...
 
